@@ -7,3 +7,9 @@ global.app = {
     path: path,
     gulp: gulp,
 }
+
+// Копирование html файлов
+const html = () => {
+    return app.gulp.src(app.path.src.html)
+        .pipe(app.gulp.dest(app.path.build.html))
+}

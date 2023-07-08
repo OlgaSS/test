@@ -8,8 +8,12 @@ const srcFolder = `./src`;
 
 // Сохраняем пути в объект
 export const path = {
-    build: {},
-    src: {},
+    build: {
+        html: `${buildFolder}/`,
+    },
+    src: {
+        html: `${srcFolder}/*.html`,
+    },
     watch: {},
     clean: buildFolder,
     buildFolder: buildFolder,
