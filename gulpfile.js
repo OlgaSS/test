@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import { deleteAsync } from 'del';
 // Импорт путей
 import { path } from './gulp/config/path.js';
 
@@ -6,6 +7,11 @@ import { path } from './gulp/config/path.js';
 global.app = {
     path: path,
     gulp: gulp,
+}
+
+// Удаление папки dist
+const reset = () => {
+    return deleteAsync(app.path.clean);
 }
 
 // Копирование html файлов
@@ -18,3 +24,9 @@ const html = () => {
 function watcher() {
     gulp.watch(path.watch.html, html);
 }
+
+// Сценарий выполнения задач
+const dev = gulp.series(reset, html, watcher);
+
+// Выполнение сценария
+gulp.task('default', dev);
