@@ -13,3 +13,8 @@ const html = () => {
     return app.gulp.src(app.path.src.html)
         .pipe(app.gulp.dest(app.path.build.html))
 }
+
+// Наблюдатель за изменениями в файлах
+function watcher() {
+    gulp.watch(path.watch.html, html);
+}

@@ -14,7 +14,9 @@ export const path = {
     src: {
         html: `${srcFolder}/*.html`,
     },
-    watch: {},
+    watch: {
+        html: `${srcFolder}/*.html`,
+    },
     clean: buildFolder,
     buildFolder: buildFolder,
     srcFolder: srcFolder,
