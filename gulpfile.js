@@ -21,6 +21,17 @@ const html = () => {
     return app.gulp.src(app.path.src.html)
         .pipe(app.plugins.replace(/@img\//g, 'img/'))
         .pipe(app.gulp.dest(app.path.build.html))
+        .pipe(app.plugins.browsersync.stream());
+}
+
+// Обновление страницы в браузере
+const server = (done) => {
+    app.plugins.browsersync.init({
+        server: {
+            baseDir: `${app.path.build.html}`
+        },
+        port: 3000,
+    });
 }
 
 // Наблюдатель за изменениями в файлах
@@ -29,7 +40,7 @@ function watcher() {
 }
 
 // Сценарий выполнения задач
-const dev = gulp.series(reset, html, watcher);
+const dev = gulp.series(reset, html, gulp.parallel(watcher, server));
 
 // Выполнение сценария
 gulp.task('default', dev);
