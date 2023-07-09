@@ -60,6 +60,13 @@ const js = () => {
         .pipe(app.plugins.browsersync.stream());
 }
 
+// Копирование изображений
+const images = () => {
+    return app.gulp.src(app.path.src.images)
+        .pipe(app.gulp.dest(app.path.build.images))
+        .pipe(app.plugins.browsersync.stream());
+}
+
 // Обновление страницы в браузере
 const server = (done) => {
     app.plugins.browsersync.init({
@@ -75,10 +82,11 @@ function watcher() {
     gulp.watch(path.watch.html, html);
     gulp.watch(path.watch.scss, scss);
     gulp.watch(path.watch.js, js);
+    gulp.watch(path.watch.images, images);
 }
 
 // Сценарий выполнения задач
-const mainTasks = gulp.parallel(html, scss, js);
+const mainTasks = gulp.parallel(html, scss, js, images);
 const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
 
 // Выполнение сценария
