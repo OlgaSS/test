@@ -1,5 +1,13 @@
 import gulp from 'gulp';
 import { deleteAsync } from 'del';
+import dartSass from 'sass';
+import gulpSass from 'gulp-sass';
+import rename from 'gulp-rename';
+import cleanCss from 'gulp-clean-css';
+import autoprefixer from 'gulp-autoprefixer';
+import groupCssMediaQueries from 'gulp-group-css-media-queries';
+const sass = gulpSass(dartSass);
+
 // Импорт путей, плагинов
 import { path } from './gulp/config/path.js';
 import { plugins } from './gulp/config/plugins.js';
@@ -24,6 +32,26 @@ const html = () => {
         .pipe(app.plugins.browsersync.stream());
 }
 
+const scss = () => {
+    return app.gulp.src(app.path.src.scss)
+        .pipe(app.plugins.replace(/@img\//g, '../img/'))
+        .pipe(sass({
+            outputStyle: 'expanded'
+        }))
+        .pipe(groupCssMediaQueries())
+        .pipe(autoprefixer({
+            grid: true,
+            overrideBrowserslist: ["last 3 versions"],
+            cascade: true
+        }))
+        .pipe(cleanCss())
+        .pipe(rename({
+            extname: ".min.css"
+        }))
+        .pipe(app.gulp.dest(app.path.build.css))
+        .pipe(app.plugins.browsersync.stream());
+}
+
 // Обновление страницы в браузере
 const server = (done) => {
     app.plugins.browsersync.init({
@@ -37,10 +65,12 @@ const server = (done) => {
 // Наблюдатель за изменениями в файлах
 function watcher() {
     gulp.watch(path.watch.html, html);
+    gulp.watch(path.watch.scss, scss);
 }
 
 // Сценарий выполнения задач
-const dev = gulp.series(reset, html, gulp.parallel(watcher, server));
+const mainTasks = gulp.parallel(html, scss);
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
 
 // Выполнение сценария
 gulp.task('default', dev);

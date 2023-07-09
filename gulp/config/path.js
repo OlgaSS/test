@@ -10,12 +10,15 @@ const srcFolder = `./src`;
 export const path = {
     build: {
         html: `${buildFolder}/`,
+        css: `${buildFolder}/css/`,
     },
     src: {
         html: `${srcFolder}/*.html`,
+        scss: `${srcFolder}/scss/style.scss`,
     },
     watch: {
         html: `${srcFolder}/*.html`,
+        scss: `${srcFolder}/scss/**/*.scss`,
     },
     clean: buildFolder,
     buildFolder: buildFolder,
