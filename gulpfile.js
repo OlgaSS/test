@@ -14,6 +14,8 @@ import { plugins } from './gulp/config/plugins.js';
 
 // Передаем значения в глобальную переменную
 global.app = {
+    build: process.argv.includes('--build'),
+    dev: !process.argv.includes('--build'),
     path: path,
     gulp: gulp,
     plugins: plugins
@@ -34,18 +36,27 @@ const html = () => {
 
 // Обработка стилей
 const scss = () => {
-    return app.gulp.src(app.path.src.scss)
+    return app.gulp.src(app.path.src.scss, { sourcemaps: app.dev })
         .pipe(app.plugins.replace(/@img\//g, '../img/'))
         .pipe(sass({
             outputStyle: 'expanded'
         }))
-        .pipe(groupCssMediaQueries())
-        .pipe(autoprefixer({
-            grid: true,
-            overrideBrowserslist: ["last 3 versions"],
-            cascade: true
-        }))
-        .pipe(cleanCss())
+        .pipe(app.plugins.if(
+            app.build,
+            groupCssMediaQueries()
+        ))
+        .pipe(app.plugins.if(
+            app.build,
+            autoprefixer({
+                grid: true,
+                overrideBrowserslist: ["last 3 versions"],
+                cascade: true
+            })
+        ))
+        .pipe(app.plugins.if(
+            app.build,
+            cleanCss()
+        ))
         .pipe(rename({
             extname: ".min.css"
         }))
@@ -88,6 +99,10 @@ function watcher() {
 // Сценарий выполнения задач
 const mainTasks = gulp.parallel(html, scss, js, images);
 const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
+const build = gulp.series(reset, mainTasks);
+
+export { dev }
+export { build }
 
 // Выполнение сценария
 gulp.task('default', dev);
