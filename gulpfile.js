@@ -32,6 +32,7 @@ const html = () => {
         .pipe(app.plugins.browsersync.stream());
 }
 
+// Обработка стилей
 const scss = () => {
     return app.gulp.src(app.path.src.scss)
         .pipe(app.plugins.replace(/@img\//g, '../img/'))
@@ -52,6 +53,13 @@ const scss = () => {
         .pipe(app.plugins.browsersync.stream());
 }
 
+// Копирование js файлов
+const js = () => {
+    return app.gulp.src(app.path.src.js)
+        .pipe(app.gulp.dest(app.path.build.js))
+        .pipe(app.plugins.browsersync.stream());
+}
+
 // Обновление страницы в браузере
 const server = (done) => {
     app.plugins.browsersync.init({
@@ -66,10 +74,11 @@ const server = (done) => {
 function watcher() {
     gulp.watch(path.watch.html, html);
     gulp.watch(path.watch.scss, scss);
+    gulp.watch(path.watch.js, js);
 }
 
 // Сценарий выполнения задач
-const mainTasks = gulp.parallel(html, scss);
+const mainTasks = gulp.parallel(html, scss, js);
 const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
 
 // Выполнение сценария
