@@ -1,0 +1,21 @@
+.sidebar {
+    background-color: $accentColor;
+    position: relative;
+    z-index: 2;
+
+    &__content {
+        position: absolute;
+        bottom: 22px;
+        right: 8px;
+        transform: rotate(-180deg);
+    }
+
+    &__title {
+        font-family: 'PT Sans', sans-serif;
+        font-size: 49px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        color: $white;
+        writing-mode: vertical-rl;
+    }
+}

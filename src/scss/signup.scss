@@ -1,0 +1,191 @@
+// Форма регистрации
+.form-signup {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 15px;
+
+    @media(max-width: 550px) {
+        grid-template-columns: 1fr;
+    }
+
+    &__item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transform: translateY(100%);
+        transition: all .6s ease-in-out;
+
+        &.show {
+            transform: translateY(0%);
+            opacity: 1;
+        }
+
+        // Подсказки при ошибках
+        .tooltip {
+            display: block;
+            position: absolute;
+            top: -25px;
+            right: 0;
+            max-width: 150px;
+            background-color: $errorColor;
+
+            &__body {
+                display: block;
+                position: relative;
+                font-size: 10px;
+                color: $white;
+                padding: 5px;
+
+                &::after {
+                    position: absolute;
+                    display: block;
+                    content: '';
+                    bottom: -4px;
+                    left: 0;
+                    width: 0;
+                    height: 0;
+                    border-left: 0px solid transparent;
+                    border-right: 6px solid transparent;
+                    border-top: 4px solid $errorColor;
+                }
+            }
+        }
+    }
+
+    &__fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        transform: translateY(100%);
+        transition: all .6s ease-in-out;
+
+        &.show {
+            transform: translateY(0%);
+            opacity: 1;
+        }
+
+        legend {
+            padding: 0;
+            font-size: 12px;
+            color: #7C7C7C;
+        }
+
+        input {
+            margin: 0;
+            background-color: transparent;
+        }
+
+        &_dateBirth {
+            display: grid;
+            grid-template-columns: 1fr 91px 69px;
+            gap: 9.8px;
+        }
+    }
+
+    // Кастомные стрелки для всех select
+    select {
+        background-image: url('../img/down-arrow.svg');
+        background-position: right;
+        background-repeat: no-repeat;
+    }
+
+    // Стили для всех label
+    label {
+        font-size: 12px;
+        color: #7C7C7C;
+    }
+
+    // Стили для всех input и select
+    input,
+    select {
+        outline: none;
+        border: none;
+        border-radius: 0%;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: 400;
+        border-bottom: 1px solid #F2F2F2;
+        padding: 5px 13px 5px 0;
+        color: inherit;
+        background-color: transparent !important;
+        transition: all .2s ease-in;
+
+        &.error {
+            border-bottom: 2px solid $errorColor;
+        }
+    }
+
+    // Стили для всех input, где нужна галочка
+    input {
+        background-position: right;
+        background-repeat: no-repeat;
+        transition: all .2s ease;
+
+        &.checked {
+            background-image: url('../img/checked.svg');
+        }
+    }
+
+    // Убираем стандартные стили 
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+    }
+}
+
+// Стили для всех радиокнопок
+.radio-button {
+    display: inline-block;
+    margin-top: 5px;
+
+    &:not(:last-child) {
+        margin-right: 14px;
+    }
+
+    input {
+        display: none;
+    }
+
+    label {
+        font-size: 14px;
+        color: inherit;
+        font-weight: 400;
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        padding-left: 18px;
+        margin-right: 0;
+        line-height: 18px;
+        user-select: none;
+
+        &:before {
+            box-sizing: border-box;
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            position: absolute;
+            left: 0;
+            bottom: 50%;
+            transform: translateY(50%);
+            border-radius: 50%;
+            border: 1px solid $accentColor;
+        }
+    }
+
+    input:checked+label::after {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        position: absolute;
+        left: 3px;
+        bottom: 50%;
+        transform: translateY(50%);
+        border-radius: 50%;
+        background-color: $accentColor;
+    }
+}
